@@ -59,13 +59,11 @@ def build_classes(cursor):
 
     return result
 
-
 if len(sys.argv) != 2:
     print("Usage: boost_python_gen.py [header file name]")
     sys.exit()
 
 #clang.cindex.Config.set_library_path('C:/Program Files (x86)/LLVM/bin')
-#clang.cindex.Config.set_library_file('/usr/local/lib/libclang.so')
 print("Setting clang path")
 clang.cindex.Config.set_library_file('C:/Python27/DLLs/libclang.dll')
 print("Clang path set")
@@ -74,11 +72,14 @@ index = clang.cindex.Index.create()
 translation_unit = index.parse(sys.argv[1], ['-x', 'c++', '-std=c++11', '-D__CODE_GENERATOR__'])
 
 classes = build_classes(translation_unit.cursor)
-tpl = Template(filename='bind.mako')
+tpl = Template(filename='templates/jniadapter.mako')
 rendered = tpl.render(
              classes=classes,
              module_name='CodegenExample',
+             namespace='JniGenTest',
              include_file=sys.argv[1])
+
+print(rendered)
 
 OUTPUT_DIR = 'generated'
 
