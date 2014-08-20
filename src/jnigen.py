@@ -28,8 +28,9 @@ class Field(object):
         self.typename = cursor.type.get_canonical().spelling
 
 class Class(object):
-    def __init__(self, cursor):
+    def __init__(self, cursor, namespaces):
         self.name = cursor.spelling
+        self.fullName = "::".join(namespaces) + "::" + cursor.spelling
         self.functions = []
         self.fields = []
         self.annotations = get_annotations(cursor)
@@ -46,15 +47,17 @@ class Class(object):
                 f = Field(c)
                 self.fields.append(f)
 
-def build_classes(cursor):
+def build_classes(cursor, namespaces):
     result = []
     for c in cursor.get_children():
         if (c.kind == clang.cindex.CursorKind.CLASS_DECL
             and c.location.file.name == sys.argv[1]):
-            a_class = Class(c)
+            a_class = Class(c, namespaces)
             result.append(a_class)
         elif c.kind == clang.cindex.CursorKind.NAMESPACE:
-            child_classes = build_classes(c)
+            namespaces.append(c.spelling);
+            child_classes = build_classes(c, namespaces)
+            namespaces.pop();
             result.extend(child_classes)
 
     return result
@@ -71,7 +74,7 @@ print("Clang path set")
 index = clang.cindex.Index.create()
 translation_unit = index.parse(sys.argv[1], ['-x', 'c++', '-std=c++11', '-D__CODE_GENERATOR__'])
 
-classes = build_classes(translation_unit.cursor)
+classes = build_classes(translation_unit.cursor, [])
 tpl = Template(filename='templates/jniadapter.mako')
 rendered = tpl.render(
              classes=classes,

@@ -40,7 +40,7 @@ class JniAdapter : JniClassBase
 {
 % for c in classes:
 
-jobject ToJava${c.name}(const ${c.name}& obj)
+jobject ToJava${c.name}(const ${c.fullName}& obj)
 {
     JNIEnv* env = GetEnv();
     jobject result = env->CreateObject(${c.name}ClassId);
