@@ -14,10 +14,10 @@ namespace JniGenTest
 class JniAdapter : JniClassBase
 {
 
-jobject ToJavaMyClass(const MyClass& obj)
+jobject ToJavaGameEngine(const GameEngine& obj)
 {
     JNIEnv* env = GetEnv();
-    jobject result = env->CreateObject(MyClassClassId);
+    jobject result = env->CreateObject(GameEngineClassId);
 
             env->SetIntField(result, obj.IntVar);
             env->SetIntField(result, obj.IntVar2);
@@ -25,15 +25,15 @@ jobject ToJavaMyClass(const MyClass& obj)
             env->SetIntField(result, obj.StringVar);
 }
 
-jobject ToNativeMyClass(jobject obj)
+jobject ToNativeGameEngine(jobject obj)
 {
     JNIEnv* env = GetEnv();
-    MyClass result;
+    GameEngine result;
 
-            result.IntVar = env->GetIntField(obj, MyClass_IntVarFieldId);
-            result.IntVar2 = env->GetIntField(obj, MyClass_IntVar2FieldId);
-            result.DoubleVar = env->GetDoubleField(obj, MyClass_DoubleVarFieldId);
-            result.StringVar = env->GetIntField(obj, MyClass_StringVarFieldId);
+            result.IntVar = env->GetIntField(obj, GameEngine_IntVarFieldId);
+            result.IntVar2 = env->GetIntField(obj, GameEngine_IntVar2FieldId);
+            result.DoubleVar = env->GetDoubleField(obj, GameEngine_DoubleVarFieldId);
+            result.StringVar = env->GetIntField(obj, GameEngine_StringVarFieldId);
 
     return result;
 }

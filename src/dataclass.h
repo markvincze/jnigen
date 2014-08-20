@@ -1,4 +1,6 @@
-﻿class MyClass
+﻿namespace FTL
+{
+class GameEngine
 {
 public:
     int IntVar;
@@ -8,4 +10,5 @@ public:
     double DoubleVar;
 
     std::string StringVar;
+}
 }

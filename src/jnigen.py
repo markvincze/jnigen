@@ -63,9 +63,9 @@ if len(sys.argv) != 2:
     print("Usage: boost_python_gen.py [header file name]")
     sys.exit()
 
-#clang.cindex.Config.set_library_path('C:/Program Files (x86)/LLVM/bin')
 print("Setting clang path")
-clang.cindex.Config.set_library_file('C:/Python27/DLLs/libclang.dll')
+#clang.cindex.Config.set_library_file('C:/Python27/DLLs/libclang.dll')
+clang.cindex.Config.set_library_path('C:/Program Files (x86)/LLVM/bin')
 print("Clang path set")
 
 index = clang.cindex.Index.create()
